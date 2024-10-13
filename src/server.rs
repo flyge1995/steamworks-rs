@@ -3,6 +3,7 @@ use crate::networking_types::NetworkingIdentity;
 #[cfg(test)]
 use serial_test::serial;
 use std::net::Ipv4Addr;
+use crate::steam_types::IPAddress;
 
 /// The main entry point into the steam client for servers.
 ///
@@ -422,6 +423,13 @@ impl Server {
         }
     }
 
+    /// Returns the public IP of the server according to Steam, useful when the server is 
+    /// behind NAT and you want to advertise its IP in a lobby for other clients to directly
+    /// connect to
+    pub fn get_public_ip(&self) -> IPAddress {
+        IPAddress::new(unsafe { sys::SteamAPI_ISteamGameServer_GetPublicIP(self.server) })
+    }
+
     /// Returns an accessor to the steam UGC interface (steam workshop)
     ///
     /// **For this to work properly, you need to call `UGC::init_for_game_server()`!**
@@ -461,7 +469,7 @@ fn test() {
         ServerMode::Authentication,
         "0.0.1",
     )
-    .unwrap();
+        .unwrap();
 
     println!("{:?}", server.steam_id());
 

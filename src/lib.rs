@@ -61,6 +61,7 @@ mod ugc;
 mod user;
 mod user_stats;
 mod utils;
+mod steam_types;
 
 pub type SResult<T> = Result<T, SteamError>;
 
